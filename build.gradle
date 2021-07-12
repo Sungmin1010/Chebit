@@ -8,6 +8,8 @@ group = 'com.nesty.chebit'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+ext["h2.version"] = "1.4.199"
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
