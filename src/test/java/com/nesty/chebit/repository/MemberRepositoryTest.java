@@ -21,10 +21,8 @@ class MemberRepositoryTest {
     @Rollback(false)
     public void testMember() throws Exception {
         //given
-        Member member = new Member();
-        member.setName("jenny");
-        member.setEmail("lmsgsm1@gmail.com");
-        member.setPwd("1234");
+        Member member = Member.createMember("jenny", "lmsgsm1@gmail.com", "1234");
+
         
         //when
         Long saveId = memberRepository.save(member);
