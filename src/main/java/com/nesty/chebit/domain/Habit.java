@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +21,7 @@ public class Habit {
 
     private String title;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -26,15 +29,19 @@ public class Habit {
 
     private String memo;
 
+    @OneToMany(mappedBy = "habit")
+    private List<Record> records = new ArrayList<>();
+
     /**
      * 생성 메서드
      */
-    public static Habit createHabit(String title, String memo ,LocalDateTime startDate, Member member){
+    public static Habit createHabit(String title, String memo ,LocalDate startDate, Member member){
         Habit habit = new Habit();
         habit.title = title;
         habit.memo = memo;
         habit.startDate = startDate;
-        habit.member = member;
+        //habit.member = member;
+        habit.setMember(member);
         return habit;
     }
 
@@ -44,10 +51,11 @@ public class Habit {
      */
 
 
+
     /**
      * 연관관계 편의 메서드
      */
-    public void setMember(Member member){
+    private void setMember(Member member){
         this.member = member;
         member.getHabits().add(this);
     }
