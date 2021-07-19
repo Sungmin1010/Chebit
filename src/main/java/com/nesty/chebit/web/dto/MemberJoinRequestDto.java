@@ -14,8 +14,6 @@ public class MemberJoinRequestDto {
     private final String email;
     private final String pwd;
 
-
-
     public Member toEntity(){
         return Member.createMember(name, email, pwd);
     }
