@@ -10,30 +10,33 @@
 <div class="ui container">
     <h1 class="ui center aligned header">Check Your Today Habit</h1>
     <div class="ui two cards">
-        <div class="card">
-            <div class="content">
-                <div class="header">Elliot Fu</div>
-                <div class="description">
-                    Elliot Fu is a film-maker from New York.
-                </div>
-            </div>
-            <div class="massive ui bottom attached button">
-                <i class="check circle icon"></i>
-                Check
+{{#list}}
+    <div class="card">
+        <div class="content">
+            <div class="header">{{title}}</div>
+            <div class="description">
+                Memo Memo
             </div>
         </div>
-        <div class="card">
-            <div class="content">
-                <div class="header">Veronika Ossi</div>
-                <div class="description">
-                    Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
-                </div>
+        {{#isChecked}}
+            <div class="massive ui disabled bottom attached button">
+                <i class="check icon"></i>
+                Checked
             </div>
-            <div class="ui bottom attached button">
-                <i class="check circle outline icon"></i>
-                Check
+        {{/isChecked}}
+        {{^isChecked}}
+            <div class="massive ui green bottom attached button">
+                <i class="add icon"></i>
+                Add Record
             </div>
-        </div>
+        {{/isChecked}}
+
+    </div>
+
+{{/list}}
+
+
+
         <div class="card">
             <div class="content">
                 <div class="header">Elliot Fu</div>

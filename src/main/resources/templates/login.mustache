@@ -59,22 +59,23 @@
                 Log-in to your account
             </div>
         </h2>
-        <form class="ui large form">
+        <form class="ui large form" method="get" action="/login">
             <div class="ui stacked segment">
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input type="text" name="email" placeholder="E-mail address">
+                        <input type="text" name="email" id="email" placeholder="E-mail address">
                     </div>
                 </div>
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="lock icon"></i>
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="password" name="pwd" id="pwd" placeholder="Password">
                     </div>
                 </div>
                 <div class="ui fluid large teal submit button">
-                    <a href="/main"> Login</a>
+<!--                    <a href="/main"> Login</a>-->
+                    <button class="" type="submit">Login</button>
                 </div>
             </div>
 
@@ -83,7 +84,7 @@
         </form>
 
         <div class="ui message">
-            New to us? <a href="#">Sign Up</a>
+            New to us? <a href="/join">Sign Up</a>
         </div>
     </div>
 </div>

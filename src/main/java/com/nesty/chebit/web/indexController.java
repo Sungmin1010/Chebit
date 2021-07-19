@@ -11,8 +11,13 @@ public class indexController {
         return "login";
     }
 
-    @GetMapping("/main")
+    //@GetMapping("/main")
     public String getMainSection(){
         return "index2";
+    }
+
+    @GetMapping("/join")
+    public String join(){
+        return "joinForm";
     }
 }

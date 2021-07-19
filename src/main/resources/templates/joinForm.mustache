@@ -1,0 +1,34 @@
+
+{{>layer/header}}
+<style>
+    h1.ui.center.header {
+        margin-top: 3em;
+    }
+</style>
+
+
+<div class="ui container">
+    <h1 class="ui center aligned header">Check Your Today Habit</h1>
+
+
+    <form class="ui form" method="post" action="/join">
+        <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" id = "name" placeholder="Name">
+        </div>
+        <div class="field">
+            <label>Email</label>
+            <input type="text" name="email" id="email" placeholder="Email">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="pwd" id="pwd" placeholder="Password">
+        </div>
+
+
+        <button class="ui button" type="submit">Submit</button>
+    </form>
+</div>
+
+
+{{>layer/footer}}
