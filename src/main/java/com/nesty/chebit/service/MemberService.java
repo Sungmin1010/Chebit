@@ -3,11 +3,13 @@ package com.nesty.chebit.service;
 import com.nesty.chebit.domain.Member;
 import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.web.dto.MemberJoinRequestDto;
+import com.nesty.chebit.web.dto.MemberLoginDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,6 +42,12 @@ public class MemberService {
     public Long findId(String email){
         List<Member> findMember = memberRepository.findByEmail(email);
         return findMember.get(0).getId();
+    }
+
+    public List<MemberLoginDto> findMember(MemberLoginDto memberLoginDto){
+        return memberRepository.findByEmail(memberLoginDto.getEmail()).stream()
+                .map( o -> new MemberLoginDto(o))
+                .collect(Collectors.toList());
 
     }
 }
