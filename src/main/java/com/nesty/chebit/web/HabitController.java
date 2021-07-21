@@ -1,7 +1,5 @@
 package com.nesty.chebit.web;
 
-import com.nesty.chebit.domain.Member;
-import com.nesty.chebit.repository.HabitRepository;
 import com.nesty.chebit.service.HabitService;
 import com.nesty.chebit.service.MemberService;
 import com.nesty.chebit.web.dto.HabitRequestDto;
@@ -10,8 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -21,9 +20,11 @@ public class HabitController {
     private final HabitService habitService;
     private final MemberService memberService;
 
-    @GetMapping("/main")
-    public String mainHabitList(@ModelAttribute MemberLoginDto memberLoginDto, Model model){
-        Long member_id = memberService.findId(memberLoginDto.getEmail());
+    @GetMapping("/chebit/main")
+    public String mainHabitList(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        MemberLoginDto member = (MemberLoginDto) session.getAttribute("member");
+        Long member_id = memberService.findId(member.getEmail());
         List<HabitRequestDto> todayHabitList = habitService.findHabits(member_id);
         model.addAttribute("list", todayHabitList);
 
