@@ -1,0 +1,80 @@
+
+{{>layer/header}}
+
+<div class="ui menu">
+    <div class="header item">
+        Chebit
+    </div>
+    <a class="item" href="/chebit/main">
+        Today Habit
+    </a>
+    <a class="item">
+        Monthly Habit
+    </a>
+    <a class="item" href="/chebit/list">
+        Habit List
+    </a>
+</div>
+
+<style>
+    h1.ui.center.header {
+        margin-top: 3em;
+    }
+</style>
+
+
+<div class="ui container">
+    <h1 class="ui center aligned header">Check Your Today Habit</h1>
+    <form id="habitFormDto" class="ui form" method="post" action="/chebit/list/add">
+        <div class="field error">
+
+            <label>습관 이름</label>
+            <input type="text" id = "title" name="title" placeholder="습관 이름" >
+            {{#title}}
+                <div class="ui pointing red basic label">
+                    Please enter a value
+                </div>
+            {{/title}}
+
+        </div>
+        <div class="field">
+            <label>시작일</label>
+            <input type="text" id = "sdate" name="sdate" placeholder="20XX-01-01" value="">
+            {{#sdate}}
+                <div class="ui pointing red basic label">
+                    Please enter a value
+                </div>
+            {{/sdate}}
+        </div>
+        <div class="field">
+            <label>나의 습관 한마디</label>
+            <textarea rows="2" id = "memo" name="memo"></textarea>
+        </div>
+        <button type="submit" id = "formBtn" class="ui button">Submit</button>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    // $('#formBtn').on('click', function () {
+    //     var data = {
+    //         title: $('#title').val(),
+    //         sdate: $('#sdate').val(),
+    //         memo: $('#memo').val()
+    //
+    //     };
+    //
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/chebit/list/add',
+    //         dataType: 'json',
+    //         contentType: 'application/json; charset=utf-8',
+    //         data: JSON.stringify(data)
+    //     });
+    //
+    // });
+
+
+</script>
+
+{{>layer/footer}}

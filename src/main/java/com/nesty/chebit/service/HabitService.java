@@ -5,15 +5,17 @@ import com.nesty.chebit.domain.Member;
 import com.nesty.chebit.repository.HabitRepository;
 import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.repository.RecordRepository;
+import com.nesty.chebit.web.dto.HabitFormDto;
 import com.nesty.chebit.web.dto.HabitRequestDto;
+import com.nesty.chebit.web.dto.MemberSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +43,24 @@ public class HabitService {
         }
         return habitRequestDtoList;
     }
+
+    /**
+     * 새로운 습관 추가 서비스
+     */
+    @Transactional
+    public Long addHabit(HabitFormDto habitFormDto, MemberSessionDto memberSessionDto){
+        //멤버조회
+        Member member = memberRepository.findOneMember(memberSessionDto.getId());
+
+        //습관엔티티
+        Habit habit = Habit.createHabit(habitFormDto.getTitle(), habitFormDto.getMemo(), LocalDate.parse(habitFormDto.getSdate(), DateTimeFormatter.ISO_DATE), member);
+
+        return habitRepository.saveHabit(habit);
+
+
+    }
+
+
+
 
 }

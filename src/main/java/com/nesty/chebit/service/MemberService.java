@@ -4,12 +4,12 @@ import com.nesty.chebit.domain.Member;
 import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.web.dto.MemberJoinRequestDto;
 import com.nesty.chebit.web.dto.MemberLoginDto;
+import com.nesty.chebit.web.dto.MemberSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,10 +44,20 @@ public class MemberService {
         return findMember.get(0).getId();
     }
 
-    public List<MemberLoginDto> findMember(MemberLoginDto memberLoginDto){
-        return memberRepository.findByEmail(memberLoginDto.getEmail()).stream()
-                .map( o -> new MemberLoginDto(o))
-                .collect(Collectors.toList());
+    /**
+     * 로그인
+     * - 회원 정보 존재 확인
+     */
+    public MemberSessionDto login(MemberLoginDto memberLoginDto){
+        List<Member> findMember = memberRepository.findByEmail(memberLoginDto.getEmail());
+        MemberSessionDto memberSessionDto ;
 
+        if(!findMember.isEmpty() && findMember.get(0).getPwd().equals(memberLoginDto.getPwd())){
+            memberSessionDto = new MemberSessionDto(findMember.get(0));
+
+        }else{
+            memberSessionDto = new MemberSessionDto();
+        }
+        return memberSessionDto;
     }
 }

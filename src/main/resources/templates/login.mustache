@@ -14,42 +14,42 @@
     }
 </style>
 <script>
-    $(document)
-            .ready(function() {
-                $('.ui.form')
-                        .form({
-                            fields: {
-                                email: {
-                                    identifier  : 'email',
-                                    rules: [
-                                        {
-                                            type   : 'empty',
-                                            prompt : 'Please enter your e-mail'
-                                        },
-                                        {
-                                            type   : 'email',
-                                            prompt : 'Please enter a valid e-mail'
-                                        }
-                                    ]
-                                },
-                                password: {
-                                    identifier  : 'password',
-                                    rules: [
-                                        {
-                                            type   : 'empty',
-                                            prompt : 'Please enter your password'
-                                        },
-                                        {
-                                            type   : 'length[6]',
-                                            prompt : 'Your password must be at least 6 characters'
-                                        }
-                                    ]
-                                }
-                            }
-                        })
-                ;
-            })
-    ;
+    // $(document)
+    //         .ready(function() {
+    //             $('.ui.form')
+    //                     .form({
+    //                         fields: {
+    //                             email: {
+    //                                 identifier  : 'email',
+    //                                 rules: [
+    //                                     {
+    //                                         type   : 'empty',
+    //                                         prompt : 'Please enter your e-mail'
+    //                                     },
+    //                                     {
+    //                                         type   : 'email',
+    //                                         prompt : 'Please enter a valid e-mail'
+    //                                     }
+    //                                 ]
+    //                             },
+    //                             password: {
+    //                                 identifier  : 'password',
+    //                                 rules: [
+    //                                     {
+    //                                         type   : 'empty',
+    //                                         prompt : 'Please enter your password'
+    //                                     },
+    //                                     {
+    //                                         type   : 'length[6]',
+    //                                         prompt : 'Your password must be at least 6 characters'
+    //                                     }
+    //                                 ]
+    //                             }
+    //                         }
+    //                     })
+    //             ;
+    //         })
+    // ;
 </script>
 <div class="ui middle aligned center aligned grid">
     <div class="column">
@@ -59,7 +59,7 @@
                 Log-in to your account
             </div>
         </h2>
-        <form class="ui large form" method="post" action="/login">
+        <form id="loginForm" class="ui large form" action="/login" method="post" >
             <div class="ui stacked segment">
                 <div class="field">
                     <div class="ui left icon input">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="ui fluid large teal submit button">
 <!--                    <a href="/main"> Login</a>-->
-                    <button class="" type="submit">Login</button>
+                    <button id="loginBtn" class="" type="submit">Login</button>
                 </div>
             </div>
 
@@ -89,4 +89,6 @@
     </div>
 </div>
 
+<!--<script src="/js/login.js">
+</script>-->
 {{>layer/footer}}

@@ -14,4 +14,9 @@ public class MemberLoginDto {
         this.email = member.getEmail();
         this.pwd = member.getPwd();
     }
+
+    public MemberLoginDto(String email, String pwd) {
+        this.email = email;
+        this.pwd = pwd;
+    }
 }

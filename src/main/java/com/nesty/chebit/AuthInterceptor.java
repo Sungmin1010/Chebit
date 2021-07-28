@@ -1,6 +1,7 @@
 package com.nesty.chebit;
 
 import com.nesty.chebit.web.dto.MemberLoginDto;
+import com.nesty.chebit.web.dto.MemberSessionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -17,8 +18,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("-----인터셉터----");
         HttpSession session = request.getSession();
-        MemberLoginDto member = (MemberLoginDto) session.getAttribute("member");
+        MemberSessionDto member = (MemberSessionDto) session.getAttribute("member");
         if(ObjectUtils.isEmpty(member)){
             log.info("로그인 되어 있지 않습니다.");
             response.sendRedirect("/");
