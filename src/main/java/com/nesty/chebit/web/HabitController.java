@@ -2,6 +2,7 @@ package com.nesty.chebit.web;
 
 import com.nesty.chebit.service.HabitService;
 import com.nesty.chebit.service.MemberService;
+import com.nesty.chebit.web.dto.HabitDto;
 import com.nesty.chebit.web.dto.HabitFormDto;
 import com.nesty.chebit.web.dto.HabitRequestDto;
 import com.nesty.chebit.web.dto.MemberSessionDto;
@@ -40,8 +41,11 @@ public class HabitController {
     }
 
     @GetMapping("/chebit/list")
-    public String habitList(){
+    public String habitList(@SessionAttribute("member") MemberSessionDto memberSessionDto, Model model){
+        log.info("----GET /chebit/list [습관 리스트] ----");
 
+        List<HabitDto> allHabits = habitService.findAllHabits(memberSessionDto);
+        model.addAttribute("list", allHabits);
         return "habit/list";
     }
 
@@ -71,5 +75,13 @@ public class HabitController {
         MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
         Long id = habitService.addHabit(habitFormDto, member);
         return "redirect:/chebit/list";
+    }
+
+    @GetMapping("/chebit/list/update/{id}")
+    public String updateHabit(@PathVariable Long id, Model model){
+        log.info("----GET /chebit/list/update/{id} [습관 수정 양식]-----");
+        HabitDto habit = habitService.findById(id);
+        model.addAttribute("habit", habit);
+        return "habit/habitEditForm";
     }
 }

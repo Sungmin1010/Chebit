@@ -5,6 +5,7 @@ import com.nesty.chebit.domain.Member;
 import com.nesty.chebit.repository.HabitRepository;
 import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.repository.RecordRepository;
+import com.nesty.chebit.web.dto.HabitDto;
 import com.nesty.chebit.web.dto.HabitFormDto;
 import com.nesty.chebit.web.dto.HabitRequestDto;
 import com.nesty.chebit.web.dto.MemberSessionDto;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +62,37 @@ public class HabitService {
 
     }
 
+    /**
+     * 습관 리스트 조회
+     *
+     */
+    public List<HabitDto> findAllHabits(MemberSessionDto memberSessionDto){
+        //멤버조회
+        Member member = memberRepository.findOneMember(memberSessionDto.getId());
+
+        return member.getHabits().stream()
+                .map( o -> new HabitDto(o))
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * 습관 수정
+     *
+     */
+    public Long updateHabit(HabitDto habitDto){
+        //습관 엔티티
+        //habitRepository.findOneHabit(habitFormDto.get);
+        return 1L;
+    }
+
+    /**
+     * 습관 수정하기 위해 id로 엔티티 정보 가져오기
+     */
+    public HabitDto findById(Long id){
+        Habit habit = habitRepository.findOneHabit(id);
+        return new HabitDto(habit);
+    }
 
 
 

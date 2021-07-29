@@ -68,25 +68,29 @@
 <div class="ui container">
     <h1 class="ui center aligned header">Habit List</h1>
     <div class="ui four cards">
-        <div class="card">
-            <div class="content">
-                <div class="header">
-                    Habit title !
+        {{#list}}
+            <div class="card">
+                <div class="content">
+                    <div class="header">
+                        {{title}}
+                    </div>
+                    <div class="meta">
+                        Start Date : {{sdate}}
+                    </div>
+                    <div class="description">
+                        {{memo}}
+                    </div>
                 </div>
-                <div class="meta">
-                    Start Date : 2021-07-01
-                </div>
-                <div class="description">
-                    Elliot requested permission to view your contact details
+                <div class="extra content">
+                    <div class="ui two buttons">
+                        <input type="hidden" value="{{id}}">
+                        <div class="ui basic green button" id="updateDiv">수정</div>
+                        <div class="ui basic red button">삭제</div>
+                    </div>
                 </div>
             </div>
-            <div class="extra content">
-                <div class="ui two buttons">
-                    <div class="ui basic green button">수정</div>
-                    <div class="ui basic red button">삭제</div>
-                </div>
-            </div>
-        </div>
+        {{/list}}
+
 
         <div class="card">
             <div class="content">
@@ -116,6 +120,12 @@
 <script type="text/javascript">
 $('#addHabit').on('click', function () {
     window.location.href = '/chebit/list/add';
+});
+
+$('div #updateDiv').on('click', function (event) {
+
+    var habitId = $(event.target).siblings('input').val();
+    window.location.href = '/chebit/list/update/'+habitId;
 });
 
 </script>

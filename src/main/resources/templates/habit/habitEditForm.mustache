@@ -1,0 +1,56 @@
+
+{{>layer/header}}
+
+<div class="ui menu">
+    <div class="header item">
+        Chebit
+    </div>
+    <a class="item" href="/chebit/main">
+        Today Habit
+    </a>
+    <a class="item">
+        Monthly Habit
+    </a>
+    <a class="item" href="/chebit/list">
+        Habit List
+    </a>
+</div>
+
+<style>
+    h1.ui.center.header {
+        margin-top: 3em;
+    }
+</style>
+
+
+<div class="ui container">
+    <h1 class="ui center aligned header">Check Your Today Habit</h1>
+    <form id="habitFormDto" class="ui form" method="post" action="/chebit/list/add">
+        {{#habit}}
+        <input type="hidden" value="{{id}}">
+        <div class="field error">
+            <label>습관 이름</label>
+            <input type="text" id = "title" name="title" value="{{title}}">
+        </div>
+        <div class="field">
+            <label>시작일</label>
+            <input type="text" id = "sdate" name="sdate" value="{{sdate}}">
+        </div>
+        <div class="field">
+            <label>나의 습관 한마디</label>
+            <textarea rows="2" id = "memo" name="memo">{{memo}}</textarea>
+        </div>
+        {{/habit}}
+        <a type="button" id = "cancleBtn" class="ui button" href="/chebit/list">취소</a>
+        <button type="submit" id = "formBtn" class="ui button">수정</button>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+</script>
+
+{{>layer/footer}}
