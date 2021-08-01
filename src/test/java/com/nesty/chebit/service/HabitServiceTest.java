@@ -6,6 +6,7 @@ import com.nesty.chebit.domain.Record;
 import com.nesty.chebit.repository.HabitRepository;
 import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.repository.RecordRepository;
+import com.nesty.chebit.web.dto.HabitFormDto;
 import com.nesty.chebit.web.dto.HabitRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class HabitServiceTest {
     @Autowired
     HabitService habitService;
 
+
+
+
     @Autowired
     MemberRepository memberRepository;
     @Autowired
@@ -40,6 +44,7 @@ class HabitServiceTest {
         Long memberId = memberRepository.save(member);
         return member;
     }
+
 
     @Test
     @Transactional
@@ -66,6 +71,78 @@ class HabitServiceTest {
         //then
         Assertions.assertThat(dtoList.get(0).getIsChecked()).isEqualTo(true);
         Assertions.assertThat(dtoList.get(1).getIsChecked()).isEqualTo(false);
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void 사용자의_모든습관_리스트_조회() throws Exception {
+        //given
+        LocalDate today = LocalDate.now();
+        Member member = getMember("jenny", "lm@naver.com", "1234");
+        Habit habit1 = Habit.createHabit("습관1", "메모", today.minusDays(1), member );
+        Habit habit2 = Habit.createHabit("습관2", "메모2", today, member );
+        Habit habit3 = Habit.createHabit("습관2", "메모2", today.plusDays(1), member );
+        habitRepository.saveHabit(habit1);
+        habitRepository.saveHabit(habit2);
+        habitRepository.saveHabit(habit3);
+
+
+
+        em.flush();
+        em.clear();
+        System.out.println("====================================================================");
+
+        //when
+        //List<HabitFormDto> allHabits = habitService.findAllHabits(member.getId());
+
+        //then
+
+       // Assertions.assertThat(allHabits.size()).isEqualTo(3);
+        //Assertions.assertThat(member.getHabits().size()).isEqualTo(3);
+
+    }
+
+    @Test
+    @Rollback(false)
+    @Transactional
+    public void 특정습관_삭제() throws Exception {
+        //given
+        LocalDate today = LocalDate.now();
+        Member member = getMember("jenny", "lm@naver.com", "1234");
+        Habit habit1 = Habit.createHabit("습관1", "메모", today.minusDays(1), member );
+        habitRepository.saveHabit(habit1);
+        Record rec1 = Record.createNewRecord(habit1, today.minusDays(2));
+        Record rec2 = Record.createNewRecord(habit1, today.minusDays(1));
+        Record rec3 = Record.createNewRecord(habit1, today);
+        recordRepository.save(rec1);
+        recordRepository.save(rec2);
+        recordRepository.save(rec3);
+
+        //when
+
+        int rec = habitService.deleteHabitWithAllRecord(habit1.getId());
+
+        //then
+        Assertions.assertThat(rec).isEqualTo(habit1.getRecords().size());
+
+    }
+    @Test
+    @Rollback(false)
+    @Transactional
+    public void 기록없는_습관_삭제() throws Exception {
+        //given
+        LocalDate today = LocalDate.now();
+        Member member = getMember("jenny", "lm@naver.com", "1234");
+        Habit habit1 = Habit.createHabit("습관1", "메모", today.minusDays(1), member );
+        habitRepository.saveHabit(habit1);
+
+        //when
+        int rec = habitService.deleteHabitWithAllRecord(habit1.getId());
+
+        //then
+        Assertions.assertThat(rec).isEqualTo(0);
 
     }
 
