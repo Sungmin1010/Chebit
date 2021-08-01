@@ -41,7 +41,8 @@
             </div>
         {{/isChecked}}
         {{^isChecked}}
-            <div class="massive ui green bottom attached button">
+            <input type="hidden" value="{{id}}" id="habitId" name="habitId">
+            <div class="massive ui green bottom attached button" id="addRecordDiv" name="addRecordDiv">
                 <i class="add icon"></i>
                 Add Record
             </div>
@@ -79,6 +80,40 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $("#addRecordDiv").on("click", function (event) {
+        const id = $(event.target).prev().val();
+        //습관id 갖고
+        const data = {
+            habitId : id,
+            inputDate : makeRecordDate()
+        };
+
+        //ajax 요청 보내기
+        $.ajax({
+            type: 'POST',
+            url: '/chebit/record',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (event) {
+
+            alert("습관 기록이 완료 되었습니다.");
+            window.location.href = '/chebit/main';
+        }).fail(function () {
+            alert("오류가 발생 했습니다.");
+        });
+        //요청 후 성공이면 checkdiv 변경
+    });
+
+    function makeRecordDate() {
+        const today = new Date();
+        return today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+
+    }
+
+</script>
 
 
 {{>layer/footer}}

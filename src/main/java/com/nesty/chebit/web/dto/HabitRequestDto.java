@@ -9,11 +9,13 @@ import lombok.ToString;
 public class HabitRequestDto {
 
     private String title;
+    private Long id;
     private Boolean isChecked;
 
     //ENTITY -> DTO
     public HabitRequestDto(Habit habit, int todayRecordCnt){
         this.title = habit.getTitle();
+        this.id = habit.getId();
         if(todayRecordCnt > 0){
             System.out.println("aaaa");
             this.isChecked = true;
