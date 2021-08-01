@@ -25,16 +25,17 @@
 
 <div class="ui container">
     <h1 class="ui center aligned header">Check Your Today Habit</h1>
-    <form id="habitFormDto" class="ui form" method="post" action="/chebit/list/add">
+    <form id="habitDto" class="ui form" method="post" action="/chebit/list/update/{{id}}">
+<!--        <input type="hidden" name="_method" value="PATCH">-->
         {{#habit}}
-        <input type="hidden" value="{{id}}">
+
         <div class="field error">
             <label>습관 이름</label>
             <input type="text" id = "title" name="title" value="{{title}}">
         </div>
         <div class="field">
             <label>시작일</label>
-            <input type="text" id = "sdate" name="sdate" value="{{sdate}}">
+            <input type="text" id = "sdate" name="sdate" value="{{sdate}}" readonly>
         </div>
         <div class="field">
             <label>나의 습관 한마디</label>

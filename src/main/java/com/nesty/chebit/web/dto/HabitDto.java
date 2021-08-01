@@ -2,9 +2,10 @@ package com.nesty.chebit.web.dto;
 
 import com.nesty.chebit.domain.Habit;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class HabitDto {
 
     private Long id;

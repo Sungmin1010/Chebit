@@ -80,10 +80,13 @@ public class HabitService {
      * 습관 수정
      *
      */
+    @Transactional
     public Long updateHabit(HabitDto habitDto){
         //습관 엔티티
-        //habitRepository.findOneHabit(habitFormDto.get);
-        return 1L;
+        Habit habit = habitRepository.findOneHabit(habitDto.getId());
+
+        return habit.edit(habitDto.getTitle(), habitDto.getMemo());
+
     }
 
     /**

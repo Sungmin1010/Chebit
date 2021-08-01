@@ -49,6 +49,14 @@ public class Habit {
     /**
      * 상태변경 메서드
      */
+    public Long edit(String title, String memo){
+        if(!this.title.equals(title)){
+            this.title = title;
+        }
+        if(!this.memo.equals(memo)) this.memo = memo;
+
+        return id;
+    }
 
 
 

@@ -78,10 +78,19 @@ public class HabitController {
     }
 
     @GetMapping("/chebit/list/update/{id}")
-    public String updateHabit(@PathVariable Long id, Model model){
+    public String updateHabitForm(@PathVariable Long id, Model model){
         log.info("----GET /chebit/list/update/{id} [습관 수정 양식]-----");
         HabitDto habit = habitService.findById(id);
         model.addAttribute("habit", habit);
         return "habit/habitEditForm";
+    }
+
+    @PostMapping("/chebit/list/update/{id}")
+    public String updateHabit(@ModelAttribute("habitDto") HabitDto habitDto){
+        log.info("----POST /chebit/list/add [습관 수정]-----");
+        //log.info("dto id : " + habitDto.getId());
+        habitService.updateHabit(habitDto);
+        return "redirect:/chebit/list";
+
     }
 }
