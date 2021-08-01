@@ -91,6 +91,12 @@ public class HabitController {
         //log.info("dto id : " + habitDto.getId());
         habitService.updateHabit(habitDto);
         return "redirect:/chebit/list";
+    }
 
+    @DeleteMapping("/chebit/list/delete/{id}")
+    @ResponseBody
+    public Integer deleteHabit(@PathVariable Long id){
+        log.info("----DELETE /chebit/list/delete [습관 삭제]-----");
+        return habitService.deleteHabitWithAllRecord(id);
     }
 }

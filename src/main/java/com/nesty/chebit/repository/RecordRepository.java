@@ -37,4 +37,15 @@ public class RecordRepository {
                 .getResultList();
     }
 
+    public void remove(Record record){
+        em.remove(record);
+
+    }
+
+    public int removeAllRecords(Habit habit){
+        return em.createQuery("delete from Record r where r.habit = :habit")
+                .setParameter("habit", habit)
+                .executeUpdate();
+    }
+
 }

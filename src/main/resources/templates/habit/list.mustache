@@ -85,7 +85,7 @@
                     <div class="ui two buttons">
                         <input type="hidden" value="{{id}}">
                         <div class="ui basic green button" id="updateDiv">수정</div>
-                        <div class="ui basic red button">삭제</div>
+                        <div class="ui basic red button" id="deleteDiv">삭제</div>
                     </div>
                 </div>
             </div>
@@ -127,6 +127,26 @@ $('div #updateDiv').on('click', function (event) {
     var habitId = $(event.target).siblings('input').val();
     window.location.href = '/chebit/list/update/'+habitId;
 });
+
+$('div #deleteDiv').on('click', function (event) {
+    const habitId = $(event.target).siblings('input').val();
+    const returnValue = confirm("습관 삭제시 모든 기록도 함께 삭제됩니다. 정말 습관을 삭제하시겠습니까?");
+    if(returnValue){
+        $.ajax({
+            type: 'DELETE',
+            url: '/chebit/list/delete/'+habitId,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+
+        }).done(function (data) {
+            alert("삭제 완료("+data+"건의 기록 삭제 완료)");
+            window.location.href = '/chebit/list';
+        }).fail(function () {
+            alert("오류가 발생 했습니다.");
+        });
+    }
+    return false;
+})
 
 </script>
 {{>layer/footer}}

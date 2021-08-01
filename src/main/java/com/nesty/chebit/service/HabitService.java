@@ -97,6 +97,25 @@ public class HabitService {
         return new HabitDto(habit);
     }
 
+    /**
+     * deleteHabit 습관 삭제 서비스
+     * - 습관 삭제시 모든 기록도 함께 삭제
+     */
+    @Transactional
+    public int deleteHabitWithAllRecord(Long habitId){
+        //습관 아이디로 엔티티 조회
+        //습관에 기록이 1개 이상이면 기록부터 지우기.
+        //기록 지우고 습관 지우기
+        Habit habit = habitRepository.findOneHabit(habitId);
+        int recordResult = 0;
+        if(habit.getRecords().size() > 0){
+            recordResult = recordRepository.removeAllRecords(habit);
+        }
+        habitRepository.remove(habit);
+
+        return recordResult;
+    }
+
 
 
 }

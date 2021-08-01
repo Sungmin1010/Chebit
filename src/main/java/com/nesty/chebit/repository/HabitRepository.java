@@ -47,7 +47,9 @@ public class HabitRepository {
                 .getResultList();
     }
 
-
+    public void remove(Habit habit){
+        em.remove(habit);
+    }
 
 
 
