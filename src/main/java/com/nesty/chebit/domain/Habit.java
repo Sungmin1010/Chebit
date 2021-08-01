@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Habit {
+public class Habit extends BaseTimeEntity{
 
     @Id @GeneratedValue
     @Column(name = "HABIT_ID")
