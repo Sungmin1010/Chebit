@@ -24,6 +24,9 @@ public class Record {
     @JoinColumn(name = "HABIT_ID")
     private Habit habit;
 
+
+    private LocalDateTime createdDate;
+
     /**
      * 생성 메서드
      */
@@ -31,6 +34,7 @@ public class Record {
         Record record = new Record();
         record.recDate = recDate;
         //record.habit = habit;
+        record.createdDate = LocalDateTime.now();
         record.setHabit(habit);
         return record;
     }
