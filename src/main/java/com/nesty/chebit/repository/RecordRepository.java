@@ -48,4 +48,15 @@ public class RecordRepository {
                 .executeUpdate();
     }
 
+    public List<Record> findWeeklyRecords(Habit habit, LocalDate sdate, LocalDate edate){
+        return em.createQuery("select r from Record r " +
+                "where r.recDate >= :sdate " +
+                "and r.recDate <= :edate " +
+                "and r.habit = :habit ", Record.class)
+                .setParameter("sdate", sdate)
+                .setParameter("edate", edate)
+                .setParameter("habit", habit)
+                .getResultList();
+    }
+
 }

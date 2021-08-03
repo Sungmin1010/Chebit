@@ -2,10 +2,7 @@ package com.nesty.chebit.web;
 
 import com.nesty.chebit.service.HabitService;
 import com.nesty.chebit.service.MemberService;
-import com.nesty.chebit.web.dto.HabitDto;
-import com.nesty.chebit.web.dto.HabitFormDto;
-import com.nesty.chebit.web.dto.HabitRequestDto;
-import com.nesty.chebit.web.dto.MemberSessionDto;
+import com.nesty.chebit.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -98,5 +96,14 @@ public class HabitController {
     public Integer deleteHabit(@PathVariable Long id){
         log.info("----DELETE /chebit/list/delete [습관 삭제]-----");
         return habitService.deleteHabitWithAllRecord(id);
+    }
+
+    @GetMapping("/chebit/weekly")
+    public String getWeekly(@SessionAttribute("member") MemberSessionDto memberSessionDto, Model model){
+        log.info("----GET /chebit/monthly [위클리 화면]-----");
+        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(memberSessionDto.getId(), LocalDate.now());
+        model.addAttribute("list", habitWithWeeklyRecord);
+
+        return "weekly/weeklyHabit";
     }
 }

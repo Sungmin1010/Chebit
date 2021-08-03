@@ -2,13 +2,11 @@ package com.nesty.chebit.service;
 
 import com.nesty.chebit.domain.Habit;
 import com.nesty.chebit.domain.Member;
+import com.nesty.chebit.domain.Record;
 import com.nesty.chebit.repository.HabitRepository;
 import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.repository.RecordRepository;
-import com.nesty.chebit.web.dto.HabitDto;
-import com.nesty.chebit.web.dto.HabitFormDto;
-import com.nesty.chebit.web.dto.HabitRequestDto;
-import com.nesty.chebit.web.dto.MemberSessionDto;
+import com.nesty.chebit.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,6 +114,43 @@ public class HabitService {
         return recordResult;
     }
 
+    /**
+     * 위클리 습관 조회 서비스
+     */
+    public List<WeeklyHabitDto> findHabitWithWeeklyRecord(Long memberId, LocalDate today){
+        Member member = memberRepository.findOneMember(memberId);
+
+        LocalDate sdate = getWeeklyStartDate(today);
+        LocalDate edate = getWeeklyEndDate(today);
+
+        List<Habit> habits = member.getHabits();
+        List<WeeklyHabitDto> list = new ArrayList<>();
+        //방법1. habit의 리스트들 찾아서 habit 마다 특정 기간 기록 조회 //방법2. join 걸어서 한꺼번에 가져오기
+        if(!habits.isEmpty()){
+            for(Habit h:habits){
+                WeeklyHabitDto weeklyHabitDto = new WeeklyHabitDto(h);
+                //weeklyHabitDto.setWeeklyRecordDto(sdate); //위클리 기록 초기화
+                List<WeeklyRecordDto> collect = recordRepository.findWeeklyRecords(h, sdate, edate).stream().map(
+                        o -> new WeeklyRecordDto(o)
+                ).collect(Collectors.toList());
+                weeklyHabitDto.setWeeklyRecordDto(sdate, collect); //위클리 기록 초기화
+                list.add(weeklyHabitDto);
+            }
+        }
+
+        return list;
+
+
+    }
+
+    private LocalDate getWeeklyStartDate(LocalDate today){
+        int dayOfWeek = today.getDayOfWeek().getValue(); //Mon : 1 ~ Sun : 7
+        return today.minusDays(dayOfWeek-1);
+    }
+    public LocalDate getWeeklyEndDate(LocalDate today){
+        int dayOfWeek = today.getDayOfWeek().getValue(); //Mon : 1 ~ Sun : 7
+        return today.plusDays(7-dayOfWeek);
+    }
 
 
 }

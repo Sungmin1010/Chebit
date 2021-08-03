@@ -14,54 +14,53 @@
     <table class="ui definition table center aligned">
         <thead>
         <tr><th class="two wide"></th>
-            <th class="two wide">일요일</th>
-            <th class="two wide">월요일<div class="ui mini blue left pointing label">
+            <th class="two wide">월요일<a class="ui right corner label">Today</a> </th>
+            <th class="two wide">화요일<div class="ui mini blue left pointing label" >
                 Today
             </div> </th>
-            <th class="two wide">화요일</th>
-            <th class="two wide">수요일</th>
+            <th class="two wide treen">수요일</th>
             <th class="two wide">목요일</th>
-            <th class="two wide"><a class="ui grey circular label">08/09</a> 토</th>
-            <th class="two wide">8/9 <a class="ui blue circular label">토</a></th>
+            <th class="two wide">
+                <div class="ui mini label" >Today</div>
+                8월 9일 금요일</th>
+            <th class="two wide"><a class="ui blue circular label">토</a> 8/9 </th>
+            <th class="two wide"><a class="ui red circular label">일</a> 8/9 </th>
         </tr></thead>
         <tbody>
         <!-- template -->
         {{#list}}
             <tr value="{{id}}">
-                <td class="left aligned">{{title}}</td>
+                <td class="left aligned" id="titleTd" name="titleTd">{{title}}</td>
                 {{#records}}
-                    <td class="selectable" value="{{recDate}}">
                     {{#isChecked}}
-                        <i class="large green check circle icon"></i>
+                    <td class="selectable" value="{{recDate}}" id="confirmRemove" name="confirmRemove">
+                        <a href="#" onclick="return false;">
+                            <i class="large yellow star icon"></i>
+                        </a>
+                    </td>
                     {{/isChecked}}
                     {{^isChecked}}
-                        <i class="large grey check circle icon"></i>
-                    {{/isChecked}}
+                    <td class="selectable" value="{{recDate}}" id="confirmRecord" name="confirmRecord">
+                        <a href="#" onclick="return false;">
+                            <i class="large grey star outline icon"></i>
+                        </a>
                     </td>
+                    {{/isChecked}}
                 {{/records}}
             </tr>
         {{/list}}
         <!-- template end-->
-        <tr value="13">
-            <td class="left aligned">습관명1</td>
-            <td class="selectable"><i class="large green check circle icon"></i></td>
-            <td class="selectable"><i class="large grey check circle icon"></i></td>
-            <td class="selectable"><i class="large grey check circle icon"></i></td>
-            <td class="selectable"><i class="large grey check circle icon"></i></td>
-            <td>None</td>
-            <td>None</td>
-            <td>None</td>
-        </tr>
+
 
         <tr>
             <td class="left aligned">습관명2</td>
-            <td>None</td>
-            <td class="selectable"><i class="large grey check circle icon"></i></td>
-            <td class="selectable"><a href="#"><i class="large green check circle icon button"></i></a></td>
-            <td class="selectable "><i class="large grey check circle icon button"></i></td>
-            <td class="selectable"><i class="large green check circle icon button"></i></td>
-            <td class="selectable"><i class="large green check circle icon button"></i></td>
-            <td class="selectable"><i class="large green check circle icon button"></i></td>
+            <td class="selectable"><i class="large yellow star icon"></i></td>
+            <td class="selectable"><i class="large yellow star icon"></i></td>
+            <td class="selectable"><a href="#" onclick="return false;"><i class="large yellow star icon"></i></a></td>
+            <td class="selectable "><i class="large yellow star icon"></i></td>
+            <td class="selectable"><i class="large grey star outline icon"></i></td>
+            <td class="selectable"><i class="large grey star outline icon"></i></td>
+            <td class="selectable"><i class="large grey star outline icon"></i></td>
         </tr>
         </tbody></table>
 
@@ -71,7 +70,33 @@
 <script type="text/javascript">
     $("#weeklyHabit").addClass("active");
 
+    $("table tr td#confirmRemove").on('click', function (event) {
+        const recDate = $(this).attr('value');
+        const habitId = $(this).parent('tr').attr('value');
+        const title = $(this).siblings('#titleTd').text();
+        const message = "["+title+"]의 "+recDate+" 기록을 삭제하시겠습니까?";
+        const returnValue = confirm(message);
+        if(returnValue){
+            console.log("해당 기록 삭제 ajax 요청 실행");
+        }
+        return false;
+    });
+    $("table tr td#confirmRecord").on('click', function () {
+        const recDate = $(this).attr('value');
+        const habitId = $(this).parent('tr').attr('value');
+        const title = $(this).siblings('#titleTd').text();
+        const message = "["+title+"]의 "+recDate+" 기록을 남기시겠습니까?";
+        const returnValue = confirm(message);
+        if(returnValue){
+            console.log("해당 기록 등록 ajax 요청 실행");
+        }
+        return false;
+    });
 
+    function testfunc(int) {
+
+        console.log(int);
+    }
     //테이블 버튼을 눌렀을때(기록이 없을때)
     //습관 id를 갖고 해당 날짜? 데이터(recDate)를 갖고 서버로 넘어가서 기록 입력
 
