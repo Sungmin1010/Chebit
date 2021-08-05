@@ -8,6 +8,8 @@ import com.nesty.chebit.repository.MemberRepository;
 import com.nesty.chebit.repository.RecordRepository;
 import com.nesty.chebit.web.dto.HabitFormDto;
 import com.nesty.chebit.web.dto.HabitRequestDto;
+import com.nesty.chebit.web.dto.WeeklyDateDto;
+import com.nesty.chebit.web.dto.WeeklyHabitDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +145,70 @@ class HabitServiceTest {
 
         //then
         Assertions.assertThat(rec).isEqualTo(0);
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void findHabitWithWeeklyRecordTest() throws Exception {
+        //given
+        LocalDate today = LocalDate.of(2021,7,29);
+        Member member = getMember("jenny", "lm@naver.com", "1234");
+        Habit habit1 = Habit.createHabit("습관1", "메모", today.minusDays(1), member );
+        Habit habit2 = Habit.createHabit("습관1", "메모", today.minusDays(1), member );
+        habitRepository.saveHabit(habit1);
+        habitRepository.saveHabit(habit2);
+
+        for(int i=0 ; i<7; i++){
+            LocalDate day = LocalDate.of(2021, 8, 1+i);
+            Record record = Record.createNewRecord(habit1, day);
+            recordRepository.save(record);
+        }
+        LocalDate day = LocalDate.of(2021, 8, 1);
+        Record record = Record.createNewRecord(habit2, day);
+        recordRepository.save(record);
+
+        em.flush();
+        em.clear();
+        System.out.println("=================================================================================");
+
+
+        //when
+        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(member.getId(), LocalDate.now());
+
+
+        //then
+        //습관은 2개
+        //습관 첫번째 기록은 7개
+        Assertions.assertThat(habitWithWeeklyRecord.size()).isEqualTo(2);
+        //습관 첫번째 habitWithWeeklyRecord.get(0)
+        WeeklyHabitDto weeklyHabitDto1 = habitWithWeeklyRecord.get(0);
+        Assertions.assertThat(weeklyHabitDto1.getRecords().size()).isEqualTo(7);
+        Assertions.assertThat(weeklyHabitDto1.getRecords().get(0).getRecDate().toString()).isEqualTo("2021-08-02");
+
+        WeeklyHabitDto weeklyHabitDto2 = habitWithWeeklyRecord.get(1);
+        Assertions.assertThat(weeklyHabitDto2.getRecords().get(0).isChecked()).isEqualTo(false);
+
+    }
+
+    @Test
+    @Rollback(false)
+    @Transactional
+    public void getWeeklyDateTest() throws Exception {
+        //given
+        LocalDate today = LocalDate.of(2021,8,6);
+
+
+        //when
+        List<WeeklyDateDto> dateList = habitService.getWeeklyDate(today);
+        for(WeeklyDateDto d:dateList){
+            System.out.println(d.toString());
+        }
+
+        //then
+        Assertions.assertThat(dateList.size()).isEqualTo(7);
+        //Assertions.assertThat(dateList.get(0).get
 
     }
 
