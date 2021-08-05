@@ -101,8 +101,12 @@ public class HabitController {
     @GetMapping("/chebit/weekly")
     public String getWeekly(@SessionAttribute("member") MemberSessionDto memberSessionDto, Model model){
         log.info("----GET /chebit/monthly [위클리 화면]-----");
-        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(memberSessionDto.getId(), LocalDate.now());
+        LocalDate today = LocalDate.now();
+        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(memberSessionDto.getId(), today);
+        List<WeeklyDateDto> date = habitService.getWeeklyDate(today);
+
         model.addAttribute("list", habitWithWeeklyRecord);
+        model.addAttribute("head", date);
 
         return "weekly/weeklyHabit";
     }

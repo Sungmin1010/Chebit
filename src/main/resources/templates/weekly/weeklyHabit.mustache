@@ -14,17 +14,11 @@
     <table class="ui definition table center aligned">
         <thead>
         <tr><th class="two wide"></th>
-            <th class="two wide">월요일<a class="ui right corner label">Today</a> </th>
-            <th class="two wide">화요일<div class="ui mini blue left pointing label" >
-                Today
-            </div> </th>
-            <th class="two wide treen">수요일</th>
-            <th class="two wide">목요일</th>
-            <th class="two wide">
-                <div class="ui mini label" >Today</div>
-                8월 9일 금요일</th>
-            <th class="two wide"><a class="ui blue circular label">토</a> 8/9 </th>
-            <th class="two wide"><a class="ui red circular label">일</a> 8/9 </th>
+            {{#head}}
+                <th class="two wide">
+                    <div class="ui {{color}} circular label">{{dayOfWeek}}</div>&nbsp&nbsp{{date}}
+                </th>
+            {{/head}}
         </tr></thead>
         <tbody>
         <!-- template -->

@@ -147,10 +147,25 @@ public class HabitService {
         int dayOfWeek = today.getDayOfWeek().getValue(); //Mon : 1 ~ Sun : 7
         return today.minusDays(dayOfWeek-1);
     }
-    public LocalDate getWeeklyEndDate(LocalDate today){
+    private LocalDate getWeeklyEndDate(LocalDate today){
         int dayOfWeek = today.getDayOfWeek().getValue(); //Mon : 1 ~ Sun : 7
         return today.plusDays(7-dayOfWeek);
     }
 
+    /**
+     * 위클리 날짜 조회
+     */
+    public List<WeeklyDateDto> getWeeklyDate(LocalDate today){
+        LocalDate startDate = getWeeklyStartDate(today);
+
+        List<WeeklyDateDto> dateList = new ArrayList<>();
+        for(int i=0; i<7; i++){
+            LocalDate date = startDate.plusDays(i);
+            WeeklyDateDto dateDto = new WeeklyDateDto(date);
+            dateList.add(dateDto);
+        }
+        return dateList;
+
+    }
 
 }
