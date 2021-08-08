@@ -4,6 +4,7 @@ import com.nesty.chebit.domain.Habit;
 import com.nesty.chebit.domain.Record;
 import com.nesty.chebit.repository.HabitRepository;
 import com.nesty.chebit.repository.RecordRepository;
+import com.nesty.chebit.web.dto.WeeklyRemoveRecordDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +37,13 @@ public class RecordService {
                     "["+habit.getTitle()+"] 습관에 대한 오늘("+today.toString()+") 기록이 이미 존재 합니다."
             );
         }
+    }
+    /**
+     * 특정 날짜 기록 삭제
+     */
+    @Transactional
+    public int removeRecord(WeeklyRemoveRecordDto removeRecordDto){
+        LocalDate recDate = removeRecordDto.getRecDateToLocalDate();
+        return recordRepository.removeRecord(removeRecordDto.getHabitId(), recDate);
     }
 }

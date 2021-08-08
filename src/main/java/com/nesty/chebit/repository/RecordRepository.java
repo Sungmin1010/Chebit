@@ -59,4 +59,13 @@ public class RecordRepository {
                 .getResultList();
     }
 
+    public int removeRecord(Long habitId, LocalDate recDate){
+
+//        em.remove(record);
+        return em.createQuery("delete from Record r where r.habit.id = :habitId and r.recDate = :recDate")
+                .setParameter("habitId", habitId)
+                .setParameter("recDate", recDate)
+                .executeUpdate();
+    }
+
 }

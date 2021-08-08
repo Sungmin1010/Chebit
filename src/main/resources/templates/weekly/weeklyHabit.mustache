@@ -62,7 +62,6 @@
 
 
 <script type="text/javascript">
-    $("#weeklyHabit").addClass("active");
 
     $("table tr td#confirmRemove").on('click', function (event) {
         const recDate = $(this).attr('value');
@@ -71,7 +70,23 @@
         const message = "["+title+"]의 "+recDate+" 기록을 삭제하시겠습니까?";
         const returnValue = confirm(message);
         if(returnValue){
-            console.log("해당 기록 삭제 ajax 요청 실행");
+            const data = {
+                "habitId" : habitId,
+                "recDate" : recDate
+
+            }
+            $.ajax({
+                type: 'DELETE',
+                url: '/chebit/record',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function (data) {
+                alert("삭제 완료 되었습니다.");
+                window.location.href = '/chebit/weekly';
+            }).fail(function (data) {
+                alert("오류가 발생했습니다. [message] : "+ data.message());
+            });
         }
         return false;
     });
