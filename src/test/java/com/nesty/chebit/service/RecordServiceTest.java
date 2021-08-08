@@ -1,15 +1,24 @@
 package com.nesty.chebit.service;
 
+import com.nesty.chebit.domain.Habit;
+import com.nesty.chebit.domain.Member;
 import com.nesty.chebit.domain.Record;
 
+import com.nesty.chebit.repository.MemberRepository;
+import com.nesty.chebit.repository.RecordRepository;
+import com.nesty.chebit.web.dto.WeeklyRemoveRecordDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class RecordServiceTest {
@@ -18,6 +27,9 @@ public class RecordServiceTest {
     private RecordService recordService;
     @Autowired
     private EntityManager em;
+
+    @MockBean
+    private RecordRepository recordRepository;
 
 
     @Test
@@ -28,6 +40,7 @@ public class RecordServiceTest {
         //이미 기록이 있는지 확인해서 있으면 에러.. 없으면 추가
         Long habitId = 3L;
         LocalDate today = LocalDate.now();
+        LocalDateTime todayDateTime = LocalDateTime.now();
 
         //when
         Long recordId = recordService.addTodayRecord(habitId, today);
@@ -36,6 +49,26 @@ public class RecordServiceTest {
         Record findRecord = em.find(Record.class, recordId);
         Assertions.assertThat(findRecord.getHabit().getId()).isEqualTo(habitId);
         Assertions.assertThat(findRecord.getRecDate()).isEqualTo(today);
+        Assertions.assertThat(findRecord.getCreatedDate()).isAfter(todayDateTime);
 
     }
+    @Test
+    @Rollback(false)
+    public void removeRecordTest() throws Exception {
+        //given
+        WeeklyRemoveRecordDto weeklyRemoveRecordDto = new WeeklyRemoveRecordDto(3L, "2021-08-07");
+        LocalDate recDateToLocalDate = weeklyRemoveRecordDto.getRecDateToLocalDate();
+        when(recordRepository.removeRecord(weeklyRemoveRecordDto.getHabitId(), recDateToLocalDate)).thenReturn(1);
+
+
+        //when
+        recordService.removeRecord(weeklyRemoveRecordDto);
+
+        //then
+        Assertions.assertThat(recDateToLocalDate).isEqualTo(LocalDate.of(2021, 8, 7));
+
+
+    }
+
+
 }
