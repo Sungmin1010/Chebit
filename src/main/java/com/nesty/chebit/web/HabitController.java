@@ -107,6 +107,7 @@ public class HabitController {
 
         model.addAttribute("list", habitWithWeeklyRecord);
         model.addAttribute("head", date);
+        model.addAttribute("today", today);
 
         return "weekly/weeklyHabit";
     }

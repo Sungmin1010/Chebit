@@ -6,6 +6,13 @@
         margin-top: 3em;
     }
 
+    .today {
+
+        background: #2c662d!important;
+        /*color: #2c662d!important;*/
+    }
+
+
 </style>
 
 
@@ -15,7 +22,7 @@
         <thead>
         <tr><th class="two wide"></th>
             {{#head}}
-                <th class="two wide">
+                <th class="two wide active">
                     <div class="ui {{color}} circular label">{{dayOfWeek}}</div>&nbsp&nbsp{{date}}
                 </th>
             {{/head}}
@@ -46,7 +53,7 @@
         <!-- template end-->
 
 
-        <tr>
+        <!--<tr>
             <td class="left aligned">습관명2</td>
             <td class="selectable"><i class="large yellow star icon"></i></td>
             <td class="selectable"><i class="large yellow star icon"></i></td>
@@ -55,13 +62,25 @@
             <td class="selectable"><i class="large grey star outline icon"></i></td>
             <td class="selectable"><i class="large grey star outline icon"></i></td>
             <td class="selectable"><i class="large grey star outline icon"></i></td>
-        </tr>
+        </tr>-->
         </tbody></table>
 
 </div>
 
 
 <script type="text/javascript">
+    function setTodayColumn(){
+        const today = "{{today}}";
+        $("td.selectable").each(function () {
+            const tdDate = $(this).attr('value');
+            if(today == tdDate){
+                $(this).addClass('active');  /*active */
+            }
+        });
+
+
+    }
+    setTodayColumn();
 
     $("table tr td#confirmRemove").on('click', function (event) {
         const recDate = $(this).attr('value');
@@ -74,10 +93,10 @@
                 "habitId" : habitId,
                 "recDate" : recDate
 
-            }
+            };
             $.ajax({
                 type: 'DELETE',
-                url: '/chebit/record',
+                url: '/chebit/weekly/record',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data)
@@ -97,7 +116,24 @@
         const message = "["+title+"]의 "+recDate+" 기록을 남기시겠습니까?";
         const returnValue = confirm(message);
         if(returnValue){
-            console.log("해당 기록 등록 ajax 요청 실행");
+            const data = {
+                "habitId" : habitId,
+                "recDate" : recDate
+            };
+            $.ajax({
+                type: 'POST',
+                url : "/chebit/weekly/record",
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+
+            }).done(function (result) {
+                alert("추가가 완료 되었습니다.");
+                window.location.href = '/chebit/weekly';
+            }).fail(function (result) {
+                alert("오류가 발생했습니다.");
+            });
+
         }
         return false;
     });

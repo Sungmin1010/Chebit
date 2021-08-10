@@ -24,12 +24,20 @@ public class RecordController {
         return recordService.addTodayRecord(recordAddDto.getHabitId(), recordAddDto.getRecDate());
     }
 
-    @DeleteMapping("/chebit/record")
+    @DeleteMapping("/chebit/weekly/record")
     @ResponseBody
     public int removeRecord(@RequestBody WeeklyRemoveRecordDto weeklyRemoveRecordDto){
         log.info("----DELETE /chebit/record [기록 삭제]-----");
         log.info(weeklyRemoveRecordDto.toString());
         return recordService.removeRecord(weeklyRemoveRecordDto);
+    }
+
+    @PostMapping("/chebit/weekly/record")
+    @ResponseBody
+    public Long saveRecord(@RequestBody WeeklyRemoveRecordDto weeklyRemoveRecordDto){
+        log.info("----DELETE /chebit/record [기록 추가]-----");
+        return recordService.addTodayRecord(weeklyRemoveRecordDto.getHabitId(), weeklyRemoveRecordDto.getRecDateToLocalDate());
+
     }
 
 }
