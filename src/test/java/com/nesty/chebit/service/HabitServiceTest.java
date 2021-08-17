@@ -19,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -61,8 +65,10 @@ class HabitServiceTest {
         habitRepository.saveHabit(habit2);
         Record habit1Record = Record.createNewRecord(habit1, today);
         Record habit2Record = Record.createNewRecord(habit2, today.minusDays(1));
+        Record habit2Record2 = Record.createNewRecord(habit2, today.minusDays(2));
         recordRepository.save(habit1Record);
         recordRepository.save(habit2Record);
+        recordRepository.save(habit2Record2);
 
         em.flush();
         em.clear();
@@ -73,6 +79,7 @@ class HabitServiceTest {
         //then
         Assertions.assertThat(dtoList.get(0).getIsChecked()).isEqualTo(true);
         Assertions.assertThat(dtoList.get(1).getIsChecked()).isEqualTo(false);
+        Assertions.assertThat(dtoList.get(1).getConsecDays()).isEqualTo(2);
 
     }
 
@@ -211,5 +218,46 @@ class HabitServiceTest {
         //Assertions.assertThat(dateList.get(0).get
 
     }
+    
+    @Test
+    @Rollback(false)
+    @Transactional
+    public void getConseqDaysTest() throws Exception {
+        //given
+        LocalDate today = LocalDate.of(2021,7,29);
+        Member member = getMember("jenny", "lm@naver.com", "1234");
+        Habit habit1 = Habit.createHabit("습관1", "메모", today.minusDays(1), member );
+        habitRepository.saveHabit(habit1);
+        for(int i=0 ; i<8; i++){
+            LocalDate day = LocalDate.of(2021, 8, 1+i);
+            Record record = Record.createNewRecord(habit1, day);
+            recordRepository.save(record);
+        }
+
+        LocalDate day2 = LocalDate.of(2021, 7, 30);
+        Record record2 = Record.createNewRecord(habit1, day2);
+        recordRepository.save(record2);
+
+        LocalDate day3 = LocalDate.of(2021, 7, 29);
+        Record record3 = Record.createNewRecord(habit1, day3);
+        recordRepository.save(record3);
+
+        em.flush();
+        em.clear();
+
+        //when
+        Habit findHabit = habitRepository.findOneHabit(habit1.getId());
+        int conseqDays = habitService.getConseqDays(findHabit, LocalDate.of(2021, 8, 8));
+
+        //then
+        List<Record> records = findHabit.getRecords();
+        for(Record r : records){
+            System.out.println(r.getId() + " / " + r.getRecDate());
+        }
+
+        Assertions.assertThat(conseqDays).isEqualTo(7);
+    }
+
+
 
 }
