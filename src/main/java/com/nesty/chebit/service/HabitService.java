@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,10 +39,29 @@ public class HabitService {
         for(Habit h : findHabits){
             //오늘 기록이 있는지 확인 & Entity -> DTO 변환
             int a = recordRepository.findTodayRecord(h, today).size();
-            HabitRequestDto dto = new HabitRequestDto(h, a);
+            int conseqDays = 0;
+            int yesterdayRec = recordRepository.findTodayRecord(h, today.minusDays(1)).size();
+            if(yesterdayRec>0) conseqDays = getConseqDays(h, today);
+            HabitRequestDto dto = new HabitRequestDto(h, a, conseqDays);
             habitRequestDtoList.add(dto);
         }
         return habitRequestDtoList;
+    }
+
+    public int getConseqDays(Habit habit, LocalDate today){
+        LocalDate yesterday = today.minusDays(1);
+        habit.getRecords().sort( (r1, r2) -> (int)ChronoUnit.DAYS.between(r1.getRecDate(), r2.getRecDate()));
+        int i = 0;
+        int conseqDays = 0;
+        for(Record r: habit.getRecords()){
+            if(r.getRecDate().compareTo(yesterday) > 0 ) continue;
+            if(r.getRecDate().plusDays(i++).equals(yesterday)){
+                conseqDays++;
+            }else{
+                break;
+            }
+        }
+        return conseqDays;
     }
 
     /**

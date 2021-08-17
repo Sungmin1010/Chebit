@@ -11,17 +11,20 @@ public class HabitRequestDto {
     private String title;
     private Long id;
     private Boolean isChecked;
+    private int consecDays;
 
     //ENTITY -> DTO
-    public HabitRequestDto(Habit habit, int todayRecordCnt){
+    public HabitRequestDto(Habit habit, int todayRecordCnt, int consecDays){
         this.title = habit.getTitle();
         this.id = habit.getId();
         if(todayRecordCnt > 0){
-            System.out.println("aaaa");
             this.isChecked = true;
+            this.consecDays = consecDays+1;
         }else{
             this.isChecked = false;
+            this.consecDays = consecDays;
         }
+
     }
 
 
