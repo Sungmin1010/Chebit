@@ -5,9 +5,14 @@ import com.nesty.chebit.web.dto.RecordAddDto;
 import com.nesty.chebit.web.dto.WeeklyRemoveRecordDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Controller
@@ -35,9 +40,18 @@ public class RecordController {
     @PostMapping("/chebit/weekly/record")
     @ResponseBody
     public Long saveRecord(@RequestBody WeeklyRemoveRecordDto weeklyRemoveRecordDto){
-        log.info("----DELETE /chebit/record [기록 추가]-----");
+        log.info("----POST /chebit/record [기록 추가]-----");
         return recordService.addTodayRecord(weeklyRemoveRecordDto.getHabitId(), weeklyRemoveRecordDto.getRecDateToLocalDate());
 
     }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView commonError(HttpServletRequest req, Exception e){
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("message", e.getMessage());
+        return mv;
+    }
+
+
 
 }

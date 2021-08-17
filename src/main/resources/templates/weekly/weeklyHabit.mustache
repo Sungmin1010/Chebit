@@ -131,7 +131,9 @@
                 alert("추가가 완료 되었습니다.");
                 window.location.href = '/chebit/weekly';
             }).fail(function (result) {
-                alert("오류가 발생했습니다.");
+                alert(result.responseJSON.message);
+                console.log(result.responseJSON.message);
+                console.log(result);
             });
 
         }
