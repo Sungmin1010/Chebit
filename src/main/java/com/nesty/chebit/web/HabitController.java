@@ -62,10 +62,11 @@ public class HabitController {
         HttpSession session = request.getSession();
         if(result.hasErrors()){
             log.info("errors");
-            model.addAttribute("habitFormDto", habitFormDto);
+            model.addAttribute("errorForm", habitFormDto);
             List<FieldError> fieldErrors = result.getFieldErrors();
+
             for(FieldError e:fieldErrors){
-                model.addAttribute(e.getField(), true);
+                model.addAttribute(e.getField()+"Error", true);
             }
             return "/habit/habitform";
         }

@@ -12,29 +12,33 @@
 <div class="ui container">
     <h1 class="ui center aligned header">Check Your Today Habit</h1>
     <form id="habitFormDto" class="ui form" method="post" action="/chebit/list/add">
-        <div class="field error">
-
-            <label>습관 이름</label>
-            <input type="text" id = "title" name="title" placeholder="습관 이름" >
-            {{#title}}
+        <div class="field">
+            <label for="title"><h3>습관 이름</h3></label>
+            <input type="text" id = "title" name="title" placeholder="습관 이름">
+            {{#titleError}}
                 <div class="ui pointing red basic label">
-                    Please enter a value
+                    필수 입력값 입니다
                 </div>
-            {{/title}}
-
+            {{/titleError}}
         </div>
         <div class="field">
-            <label>시작일</label>
-            <input type="text" id = "sdate" name="sdate" placeholder="20XX-01-01" value="">
-            {{#sdate}}
-                <div class="ui pointing red basic label">
-                    Please enter a value
+            <label for="sdate"><h3>시작일</h3></label>
+            <div class="ui calendar" id="example1">
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <input type="text" id="sdate" name="sdate" placeholder="날짜" value="{{#errorForm}}{{sdate}}{{/errorForm}}">
                 </div>
-            {{/sdate}}
+            </div>
+            {{#sdateError}}
+                <div class="ui pointing red basic label">
+                    필수 입력값 입니다
+                </div>
+            {{/sdateError}}
         </div>
         <div class="field">
-            <label>나의 습관 한마디</label>
-            <textarea rows="2" id = "memo" name="memo"></textarea>
+            <label for="memo"><h3>나의 습관 한마디</h3></label>
+            <textarea rows="2" id = "memo" name="memo">
+{{#errorForm}}{{memo}}{{/errorForm}}</textarea>
         </div>
         <button type="submit" id = "formBtn" class="ui button">Submit</button>
     </form>
@@ -42,6 +46,22 @@
 </div>
 
 <script type="text/javascript">
+    $("#habitList").addClass("active");
+    $('#example1').calendar({
+        type: 'date',
+        firstDayOfWeek:1,
+        today: true,
+        formatter: {
+            date: function (date, settings) {
+                //return a formatted string representing the date of 'date'
+                const year = date.getFullYear();
+                const month = date.getMonth()+1;
+                const day = date.getDate();
+                return year + "-" + month.toString().padStart(2, '0') + "-" + day.toString().padStart(2, '0');
+            }
+        }
+
+    });
     // $('#formBtn').on('click', function () {
     //     var data = {
     //         title: $('#title').val(),
@@ -62,5 +82,7 @@
 
 
 </script>
+
+
 
 {{>layer/footer}}
