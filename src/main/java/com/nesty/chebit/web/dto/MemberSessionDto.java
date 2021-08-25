@@ -23,4 +23,13 @@ public class MemberSessionDto {
     public MemberSessionDto(String email){
 
     }
+
+    public boolean isEmpty(){
+        if(id == null) return true;
+        if(email.isEmpty()) return true;
+        if(name.isEmpty()) return true;
+        return false;
+    }
+
+
 }

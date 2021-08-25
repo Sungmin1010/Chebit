@@ -6,6 +6,7 @@ import com.nesty.chebit.web.dto.MemberLoginDto;
 import com.nesty.chebit.web.dto.MemberSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,19 +34,20 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(MemberLoginDto memberLoginDto, HttpServletRequest request){
+    public String login(MemberLoginDto memberLoginDto, HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
         if(!ObjectUtils.isEmpty(session.getAttribute("member"))){
-            System.out.println("세션삭제");
             session.removeAttribute("member");
         }
 
         MemberSessionDto findDto = memberService.login(memberLoginDto);
-        if(!findDto.getEmail().isEmpty()){
+        if(!findDto.isEmpty()){
             session.setAttribute("member", findDto);
             return "redirect:/chebit/main";
         }else{
-            return "redirect:/";
+            String message = "이메일, 또는 비밀번호가 맞지 않습니다.";
+            model.addAttribute("message", message);
+            return "login";
         }
     }
 }
