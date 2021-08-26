@@ -5,33 +5,46 @@ import com.nesty.chebit.web.dto.MemberJoinRequestDto;
 import com.nesty.chebit.web.dto.MemberLoginDto;
 import com.nesty.chebit.web.dto.MemberSessionDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public String join(MemberJoinRequestDto memberJoinRequestDto){
-
+    public String join(@Valid MemberJoinRequestDto memberJoinRequestDto,BindingResult bindingResult){
+        log.info("----POST /join [회원가입]-----");
         Long id = memberService.join(memberJoinRequestDto);
 
         return "redirect:/";
 
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ModelAndView memberError(IllegalStateException e, HttpServletRequest request){
+        log.info("----예외 핸들러 -----");
+        MemberJoinRequestDto dto = new MemberJoinRequestDto(request.getParameter("name"), request.getParameter("email"), request.getParameter("pwd"));
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("joinForm");
+        modelAndView.addObject("value", dto);
+        modelAndView.addObject("errorMessage", e.getMessage());
+        return modelAndView;
+    }
+
+
 
     @PostMapping("/login")
     public String login(MemberLoginDto memberLoginDto, HttpServletRequest request, Model model){

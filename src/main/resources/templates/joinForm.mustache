@@ -5,28 +5,83 @@
         margin-top: 3em;
     }
 </style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.ui.form').form({
+            fields: {
+                name:{
+                  identifier: 'name',
+                  rules : [
+                      {
+                          type : 'empty',
+                          prompt : '이름을 입력 해주세요.'
+                      }
+                  ]
+                },
+                email:{
+                    identifier: 'email',
+                    rules: [
+                        {
+                            type : 'empty',
+                            prompt : '이메일을 입력해주세요.'
+                        },
+                        {
+                            type : 'email',
+                            prompt: '유효한 이메일을 입력 해주세요.'
+                        }
+                    ]
+                },
+                pwd:{
+                    identifier: 'pwd',
+                    rules: [
+                        {
+                            type : 'empty',
+                            prompt : '비밀번호를 입력해주세요.'
+                        },
+                        {
+                            type : 'length[4]',
+                            prompt: '비밀번호는 4자리 이상으로 입력 바랍니다.'
+                        }
+                        /*,
+                        {
+                            type : 'regExp',
+                            value : /^([a-zA-Z]+|[0-9]+)$/,
+                            prompt: '비밀번호는 영문 소문자와 숫자 조합으로 입력 해주세요.'
+                        }*/
+                    ]
+                }
+            }
+        });
 
+    });
+    {{#errorMessage}}
+        alert("이미 존재하는 이메일 입니다.");
+    {{/errorMessage}}
+</script>
 
 <div class="ui container">
-    <h1 class="ui center aligned header">Check Your Today Habit</h1>
+    <h1 class="ui center aligned header">Join to Chebit!</h1>
 
 
     <form class="ui form" method="post" action="/join">
         <div class="field">
             <label>Name</label>
-            <input type="text" name="name" id = "name" placeholder="Name">
+            <input type="text" name="name" id = "name" placeholder="Name" value="{{#value}}{{name}}{{/value}}">
         </div>
-        <div class="field">
+        <div class="field {{#value}}error{{/value}}">
             <label>Email</label>
-            <input type="text" name="email" id="email" placeholder="Email">
+            <input type="text" name="email" id="email" placeholder="Email" value="{{#value}}{{email}}{{/value}}">
         </div>
         <div class="field">
             <label>Password</label>
-            <input type="password" name="pwd" id="pwd" placeholder="Password">
+            <input type="password" name="pwd" id="pwd" placeholder="Password" value="{{#value}}{{pwd}}{{/value}}">
         </div>
 
 
+        <button class="ui button" >취소</button>
         <button class="ui button" type="submit">Submit</button>
+        <div class="ui error message">
+        </div>
     </form>
 </div>
 

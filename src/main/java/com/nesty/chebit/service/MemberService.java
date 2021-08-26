@@ -34,7 +34,7 @@ public class MemberService {
     private void valiDateDuplicateMember(MemberJoinRequestDto memberJoinRequestDto) {
         List<Member> findMemebrs = memberRepository.findByEmail(memberJoinRequestDto.getEmail());
         if(!findMemebrs.isEmpty()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new IllegalStateException("이미 존재하는 이메일 입니다.");
         }
 
     }
