@@ -25,11 +25,11 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public String join(@Valid MemberJoinRequestDto memberJoinRequestDto,BindingResult bindingResult){
+    public String join(@Valid MemberJoinRequestDto memberJoinRequestDto,BindingResult bindingResult, Model model){
         log.info("----POST /join [회원가입]-----");
         Long id = memberService.join(memberJoinRequestDto);
-
-        return "redirect:/";
+        model.addAttribute("joinSuccess", id);
+        return "login";
 
     }
 
