@@ -1,5 +1,6 @@
-package com.nesty.chebit;
+package com.nesty.chebit.config;
 
+import com.nesty.chebit.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
