@@ -23,10 +23,12 @@ public class RecordController {
 
     @PostMapping("/chebit/record")
     @ResponseBody
-    public Long saveTodayRecord(@RequestBody RecordAddDto recordAddDto, Model model){
+    public ResponseEntity<RecordAddDto> saveTodayRecord(@RequestBody RecordAddDto recordAddDto, Model model){
         log.info("----POST /chebit/record [기록 추가]-----");
         recordAddDto.convertToLocalDate();
-        return recordService.addTodayRecord(recordAddDto.getHabitId(), recordAddDto.getRecDate());
+        Long recordId = recordService.addTodayRecord(recordAddDto.getHabitId(), recordAddDto.getRecDate());
+        recordAddDto.setRecordId(recordId);
+        return ResponseEntity.ok(recordAddDto);
     }
 
     @DeleteMapping("/chebit/weekly/record")
