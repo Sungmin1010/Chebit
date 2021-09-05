@@ -20,8 +20,10 @@ public class MemberSessionDto {
         name = member.getName();
     }
 
-    public MemberSessionDto(String email){
-
+    public MemberSessionDto(Long id, String email, String name) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
     }
 
     public boolean isEmpty(){

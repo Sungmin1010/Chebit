@@ -27,6 +27,9 @@ public class MemberController {
     @PostMapping("/join")
     public String join(@Valid MemberJoinRequestDto memberJoinRequestDto,BindingResult bindingResult, Model model){
         log.info("----POST /join [회원가입]-----");
+        if(bindingResult.hasErrors()){
+            return "joinForm";
+        }
         Long id = memberService.join(memberJoinRequestDto);
         model.addAttribute("joinSuccess", id);
         return "login";
