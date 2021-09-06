@@ -1,5 +1,6 @@
 package com.nesty.chebit.web;
 
+import com.nesty.chebit.config.LoginMember;
 import com.nesty.chebit.service.MemberService;
 import com.nesty.chebit.web.dto.MemberJoinRequestDto;
 import com.nesty.chebit.web.dto.MemberLoginDto;

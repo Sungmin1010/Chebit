@@ -1,5 +1,6 @@
 package com.nesty.chebit.web;
 
+import com.nesty.chebit.config.LoginMember;
 import com.nesty.chebit.service.HabitService;
 import com.nesty.chebit.service.MemberService;
 import com.nesty.chebit.web.dto.*;
@@ -11,8 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,25 +23,22 @@ import java.util.List;
 public class HabitController {
 
     private final HabitService habitService;
-    private final MemberService memberService;
+    //private final MemberService memberService;
 
     @GetMapping("/chebit/main")
-    public String mainHabitList(Model model, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        MemberSessionDto member = (MemberSessionDto) session.getAttribute("member");
-        Long member_id = memberService.findId(member.getEmail());
+    public String mainHabitList(Model model, @LoginMember MemberSessionDto member){
+        log.info("----GET /chebit/main [메인 화면] ---");
+        Long member_id = member.getId();
         List<HabitRequestDto> todayHabitList = habitService.findHabits(member_id);
         model.addAttribute("list", todayHabitList);
-
 
         return "index2";
     }
 
     @GetMapping("/chebit/list")
-    public String habitList(@SessionAttribute("member") MemberSessionDto memberSessionDto, Model model){
+    public String habitList(@LoginMember MemberSessionDto member, Model model){
         log.info("----GET /chebit/list [습관 리스트] ----");
-
-        List<HabitDto> allHabits = habitService.findAllHabits(memberSessionDto);
+        List<HabitDto> allHabits = habitService.findAllHabits(member);
         model.addAttribute("list", allHabits);
         return "habit/list";
     }
@@ -57,9 +53,8 @@ public class HabitController {
     }
 
     @PostMapping("/chebit/list/add")
-    public String addHabit(@Valid HabitFormDto habitFormDto, BindingResult result, Model model, HttpServletRequest request ){
+    public String addHabit(@Valid HabitFormDto habitFormDto, BindingResult result, Model model, @LoginMember MemberSessionDto member ){
         log.info("----POST /chebit/list/add [새로운 습관 등록]-----");
-        HttpSession session = request.getSession();
         if(result.hasErrors()){
             log.info("errors");
             model.addAttribute("errorForm", habitFormDto);
@@ -70,8 +65,6 @@ public class HabitController {
             }
             return "/habit/habitform";
         }
-
-        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
         Long id = habitService.addHabit(habitFormDto, member);
         return "redirect:/chebit/list";
     }
@@ -87,7 +80,6 @@ public class HabitController {
     @PostMapping("/chebit/list/update/{id}")
     public String updateHabit(@ModelAttribute("habitDto") HabitDto habitDto){
         log.info("----POST /chebit/list/add [습관 수정]-----");
-        //log.info("dto id : " + habitDto.getId());
         habitService.updateHabit(habitDto);
         return "redirect:/chebit/list";
     }
@@ -100,10 +92,10 @@ public class HabitController {
     }
 
     @GetMapping("/chebit/weekly")
-    public String getWeekly(@SessionAttribute("member") MemberSessionDto memberSessionDto, Model model){
+    public String getWeekly(@LoginMember MemberSessionDto member, Model model){
         log.info("----GET /chebit/monthly [위클리 화면]-----");
         LocalDate today = LocalDate.now();
-        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(memberSessionDto.getId(), today);
+        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(member.getId(), today);
         List<WeeklyDateDto> date = habitService.getWeeklyDate(today);
 
         model.addAttribute("list", habitWithWeeklyRecord);
