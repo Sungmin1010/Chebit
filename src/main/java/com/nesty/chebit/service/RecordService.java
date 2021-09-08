@@ -58,7 +58,7 @@ public class RecordService {
      */
     @Transactional
     public int removeRecord(WeeklyRemoveRecordDto removeRecordDto){
-        LocalDate recDate = removeRecordDto.getRecDateToLocalDate();
+        LocalDate recDate = removeRecordDto.recDateToLocalDate();
         return recordRepository.removeRecord(removeRecordDto.getHabitId(), recDate);
     }
 }

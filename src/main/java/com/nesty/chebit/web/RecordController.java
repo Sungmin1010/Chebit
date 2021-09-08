@@ -41,9 +41,11 @@ public class RecordController {
 
     @PostMapping("/chebit/weekly/record")
     @ResponseBody
-    public Long saveRecord(@RequestBody WeeklyRemoveRecordDto weeklyRemoveRecordDto){
+    public ResponseEntity<WeeklyRemoveRecordDto> saveRecord(@RequestBody WeeklyRemoveRecordDto weeklyRemoveRecordDto){
         log.info("----POST /chebit/record [기록 추가]-----");
-        return recordService.addTodayRecord(weeklyRemoveRecordDto.getHabitId(), weeklyRemoveRecordDto.getRecDateToLocalDate());
+        Long recordId = recordService.addTodayRecord(weeklyRemoveRecordDto.getHabitId(), weeklyRemoveRecordDto.recDateToLocalDate());
+        weeklyRemoveRecordDto.setRecordId(recordId);
+        return ResponseEntity.ok(weeklyRemoveRecordDto);
 
     }
 

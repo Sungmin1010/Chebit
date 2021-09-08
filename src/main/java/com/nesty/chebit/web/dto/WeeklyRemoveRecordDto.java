@@ -12,8 +12,9 @@ public class WeeklyRemoveRecordDto {
 
     private Long habitId;
     private String recDate;
+    private Long recordId;
 
-    public LocalDate getRecDateToLocalDate(){
+    public LocalDate recDateToLocalDate(){
         String[] splitDate = recDate.split("-");
 
         return LocalDate.of(
