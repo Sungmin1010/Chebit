@@ -30,5 +30,22 @@ public class MemberRepository {
 
     }
 
+    public Member findOneByEmail(String email){
+        return em.createQuery("select m from Member m where m.email = :email", Member.class)
+                .setParameter("email", email)
+                .getSingleResult();
+
+    }
+
+    public Long countByEmail(String email){
+        return em.createQuery("select count(m) from Member m where m.email = :email", Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
+    }
+
+    public void delete(Member member){
+        em.remove(member);
+    }
+
 
 }

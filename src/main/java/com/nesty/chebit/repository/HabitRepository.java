@@ -28,20 +28,20 @@ public class HabitRepository {
     }
 
     public List<Habit> findByMember(Member member){
-        return em.createQuery("select h from Habit h where h.member = :member")
+        return em.createQuery("select h from Habit h where h.member = :member", Habit.class)
                 .setParameter("member", member)
                 .getResultList();
     }
 
     public List<Habit> findByMemberWithStartDate(Member member, LocalDate startDate){
-        return em.createQuery("select h from Habit h where h.member = :member and h.startDate <= :startDate")
+        return em.createQuery("select h from Habit h where h.member = :member and h.startDate <= :startDate", Habit.class)
                 .setParameter("member", member)
                 .setParameter("startDate", startDate)
                 .getResultList();
     }
 
     public List<Habit> findHabitWithTodayRecord(Member member, LocalDate recDate){
-        return em.createQuery("select h from Habit h left join h.records r where h.member = :member ")
+        return em.createQuery("select h from Habit h left join h.records r where h.member = :member ", Habit.class)
                 .setParameter("member", member)
                 //.setParameter("recDate", recDate)
                 .getResultList();
