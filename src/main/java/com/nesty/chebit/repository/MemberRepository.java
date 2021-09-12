@@ -4,6 +4,7 @@ import com.nesty.chebit.domain.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -30,10 +31,16 @@ public class MemberRepository {
 
     }
 
-    public Member findOneByEmail(String email){
-        return em.createQuery("select m from Member m where m.email = :email", Member.class)
-                .setParameter("email", email)
-                .getSingleResult();
+    public Member findOneByEmail(String email) {
+        Member findMember = null;
+        try {
+            findMember = em.createQuery("select m from Member m where m.email = :email", Member.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        }catch (NoResultException e){
+            findMember = null;
+        }
+        return findMember;
 
     }
 
