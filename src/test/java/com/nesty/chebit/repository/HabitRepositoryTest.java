@@ -33,7 +33,7 @@ class HabitRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void testSaveHabit() throws Exception {
         //given
         Member member = saveMember();
@@ -55,7 +55,7 @@ class HabitRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void 연관관계_편의메서드_테스트() throws Exception {
         //given
         Member member = Member.createMember("jenny", "test", "1234");

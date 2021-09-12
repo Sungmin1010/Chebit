@@ -54,7 +54,7 @@ class HabitServiceTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void 사용자의습관_오늘기록여부와_함께_조회() throws Exception {
         //given
         LocalDate today = LocalDate.now();
@@ -85,7 +85,7 @@ class HabitServiceTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void 사용자의_모든습관_리스트_조회() throws Exception {
         //given
         LocalDate today = LocalDate.now();
@@ -114,7 +114,7 @@ class HabitServiceTest {
     }
 
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void 특정습관_삭제() throws Exception {
         //given
@@ -138,7 +138,7 @@ class HabitServiceTest {
 
     }
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void 기록없는_습관_삭제() throws Exception {
         //given
@@ -157,7 +157,7 @@ class HabitServiceTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void findHabitWithWeeklyRecordTest() throws Exception {
         //given
         LocalDate today = LocalDate.of(2021,7,29);
@@ -182,7 +182,7 @@ class HabitServiceTest {
 
 
         //when
-        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(member.getId(), LocalDate.now());
+        List<WeeklyHabitDto> habitWithWeeklyRecord = habitService.findHabitWithWeeklyRecord(member.getId(), LocalDate.of(2021, 8, 7));
 
 
         //then
@@ -200,7 +200,7 @@ class HabitServiceTest {
     }
 
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void getWeeklyDateTest() throws Exception {
         //given
@@ -220,7 +220,7 @@ class HabitServiceTest {
     }
     
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void getConseqDaysTest() throws Exception {
         //given

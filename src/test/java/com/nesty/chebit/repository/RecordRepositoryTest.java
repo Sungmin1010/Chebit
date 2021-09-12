@@ -36,7 +36,7 @@ class RecordRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void testFind() throws Exception {
         LocalDate today = LocalDate.now();
         Member member = getMember("jenny", "lm@naver.com", "1234");
@@ -71,7 +71,7 @@ class RecordRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void 모든_기록_삭제_테스트() throws Exception {
         //given
         LocalDate today = LocalDate.now();
@@ -109,7 +109,7 @@ class RecordRepositoryTest {
     }
 
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void findWeeklyRecordsTest() throws Exception {
         //given
@@ -136,7 +136,7 @@ class RecordRepositoryTest {
     }
 
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void removeRecordTest() throws Exception {
         //given
@@ -157,6 +157,29 @@ class RecordRepositoryTest {
 
         //then
         Assertions.assertThat(findRecord).isNull();
+    }
+
+    @Test
+    @Transactional
+    //@Rollback(false)
+    public void countTest() throws Exception {
+        //given
+        LocalDate date = LocalDate.of(2021,8,1);
+        Member member = getMember("jenny", "lm@naver.com", "1234");
+        Habit habit1 = Habit.createHabit("습관1", "메모", date, member );
+        habitRepository.saveHabit(habit1);
+        LocalDate day = LocalDate.of(2021, 8, 1);
+        Record record = Record.createNewRecord(habit1, day);
+        recordRepository.save(record);
+
+
+        //when
+        Long count = recordRepository.count(habit1.getId());
+
+
+        //then
+        Assertions.assertThat(count).isEqualTo(1);
+
     }
 
 }

@@ -68,4 +68,19 @@ public class RecordRepository {
                 .executeUpdate();
     }
 
+    public Record findByHabitAndSdate(Habit habit, LocalDate recDate){
+        return em.createQuery("select r from Record r where r.habit = :habit and r.recDate = :recDate", Record.class)
+                .setParameter("habit", habit)
+                .setParameter("recDate", recDate)
+                .getSingleResult();
+    }
+
+    public Long count(Long habitId){
+        return em.createQuery("select count(r) from Record r where r.habit.id = :habitId", Long.class)
+                .setParameter("habitId", habitId)
+                .getSingleResult();
+    }
+
+
+
 }
