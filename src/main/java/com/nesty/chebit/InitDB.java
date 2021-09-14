@@ -11,19 +11,19 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class InitDB {
     private final InitService initService;
 
-    @PostConstruct
+    //@PostConstruct
     public void init(){
 
         initService.dbInit1();
     }
 
-    @Component
-    @Transactional
+    //@Component
+    //@Transactional
     @RequiredArgsConstructor
     static class InitService{
         private final EntityManager em;
