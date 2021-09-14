@@ -36,27 +36,35 @@ public class RecordServiceTest {
 
 
     @Test
-    @Rollback(false)
+    //@Rollback(false)
+    @Transactional
     public void 특정습관_오늘기록_추가() throws Exception {
         //given  addTodayRecord(Long habitId, LocalDate today)
         //습관id를 전달하면 해당 습관의 오늘 기록을 추가한다.
         //이미 기록이 있는지 확인해서 있으면 에러.. 없으면 추가
-        Long habitId = 3L;
+        Member member = Member.createMember("nesty", "test@mail.com", "1234");
+        em.persist(member);
+        Habit habit = Habit.createHabit("습관1", "메모", LocalDate.now(), member);
+        em.persist(habit);
+        //Record record = Record.createNewRecord(habit, LocalDate.now());
+        //em.persist(record);
+        em.flush();
+        em.clear();
         LocalDate today = LocalDate.now();
         LocalDateTime todayDateTime = LocalDateTime.now();
 
         //when
-        Long recordId = recordService.addTodayRecord(habitId, today);
+        Long recordId = recordService.addTodayRecord(habit.getId(), today);
 
         //then
         Record findRecord = em.find(Record.class, recordId);
-        Assertions.assertThat(findRecord.getHabit().getId()).isEqualTo(habitId);
+        Assertions.assertThat(findRecord.getHabit().getId()).isEqualTo(habit.getId());
         Assertions.assertThat(findRecord.getRecDate()).isEqualTo(today);
         Assertions.assertThat(findRecord.getCreatedDate()).isAfter(todayDateTime);
 
     }
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     @Transactional
     public void removeRecordTest() throws Exception {
         //given
