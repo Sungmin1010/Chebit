@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -148,6 +149,28 @@ public class MemberControllerTest {
                 .andExpect(view().name("login"))
                 .andExpect(request().sessionAttributeDoesNotExist("member"))
                 .andExpect(model().attribute("message", "이메일, 또는 비밀번호가 맞지 않습니다."))
+                .andDo(print());
+
+    }
+
+    @Test
+    public void 로그아웃() throws Exception {
+        //given
+        MemberSessionDto sessionDto = new MemberSessionDto();
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get("/logout")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .sessionAttr("member", sessionDto)
+        );
+
+        //then
+
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(request().sessionAttributeDoesNotExist("member"))
                 .andDo(print());
 
     }
