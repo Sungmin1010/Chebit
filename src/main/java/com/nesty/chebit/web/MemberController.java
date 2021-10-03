@@ -67,4 +67,12 @@ public class MemberController {
             return "login";
         }
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        log.info("----로그아웃 -----");
+        HttpSession session = request.getSession();
+        session.removeAttribute("member");
+        return "redirect:/";
+    }
 }
