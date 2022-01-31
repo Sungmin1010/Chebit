@@ -12,6 +12,7 @@ public class HabitRequestDto {
     private Long id;
     private Boolean isChecked;
     private int consecDays;
+    private String memo;
 
     //ENTITY -> DTO
     public HabitRequestDto(Habit habit, int todayRecordCnt, int consecDays){
@@ -24,6 +25,7 @@ public class HabitRequestDto {
             this.isChecked = false;
             this.consecDays = consecDays;
         }
+        this.memo = habit.getMemo();
 
     }
 
