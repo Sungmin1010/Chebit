@@ -1,0 +1,20 @@
+version: "3.2"
+services:
+  database:
+    container_name: database
+    image: oscarfonts/h2
+    volumes:
+      - /mnt/c/User/sungmin/dev/docker-compose/h2:/opt/h2-data
+    environment:
+      - H2_OPTIONS=-ifNotExists
+    ports:
+      - 1521:1521
+      - 81:81
+
+  application:
+    container_name: chebit-app
+    build: .
+    ports:
+      - 8282:8282
+    depends_on:
+      - database
